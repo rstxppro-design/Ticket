@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobante BCP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @font-face { font-family: 'Flexo'; src: local('Flexo-Regular'); font-weight: 400; }
+        @font-face { font-family: 'Flexo'; src: local('Flexo-Bold'); font-weight: 700; }
+
+        body { font-family: 'Flexo', sans-serif; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+        
+        #comprobante { 
+            background: white; width: 400px; padding: 40px 40px 0 40px; border-radius: 0; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); box-sizing: border-box; position: relative;
+        }
+
+        .logo-box { width: 80px; height: 30px; margin-bottom: 25px; display: flex; align-items: center; justify-content: flex-start; cursor: pointer; }
+        .logo-box img { max-width: 80px; max-height: 30px; display: block; object-fit: contain; }
+        
+        h1 { font-family: 'Flexo', sans-serif; font-size: 19px; text-align: center; margin: 0 0 25px 0; font-weight: 700; color: #1f2d43; }
+        .monto { text-align: center; font-size: 48px; font-weight: 500; color: #0a278d; margin: 10px 0; outline: none; letter-spacing: -1px; caret-color: #0a278d; }
+        .fecha { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; outline: none; }
+        
+        .fila { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 0; }
+        .con-linea { border-bottom: 1px solid #e0e0e0; }
+
+        .etiqueta { color: #888; font-size: 14px; width: 40%; }
+        .datos { text-align: right; font-weight: 600; font-size: 14px; color: #1b2637; width: 60%; outline: none; display: flex; flex-direction: column; align-items: flex-end; }
+        .sub-datos { color: #888; font-weight: 400; font-size: 13px; margin-top: 2px; }
+
+        /* Diseño exacto que pediste */
+        .ondas-container { width: calc(100% + 80px); margin-left: -40px; margin-top: 40px; line-height: 0; }
+        .ondas-container img { width: 100%; display: block; }
+
+        .btn-descargar { margin-top: 30px; padding: 12px 30px; background-color: #002a54; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div id="comprobante">
+    <div class="logo-box" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" hidden onchange="cargarImagen(event)">
+        <img id="logoImg" src="" alt="">
+    </div>
+
+    <h1>¡Transferencia exitosa!</h1>
+    
+    <div class="monto" contenteditable="true">S/ 2,000.00</div>
+    <div class="fecha" contenteditable="true">Sábado, 27 Junio 2026 - 08:23 a.m.</div>
+
+    <div class="fila con-linea"><span class="etiqueta">Enviado a</span><div class="datos" contenteditable="true">Ramirez Huanca Jeanpaul F. <div class="sub-datos">**** 6090</div><div class="sub-datos">Moneda Soles</div></div></div>
+    <div class="fila con-linea"><span class="etiqueta">Desde</span><div class="datos" contenteditable="true">Cuenta Digital Soles <div class="sub-datos">**** 2063</div></div></div>
+    <div class="fila con-linea"><span class="etiqueta">Número de operación</span><div class="datos" contenteditable="true">00614626</div></div>
+
+    <div class="ondas-container">
+        <img src="INFERIOR.jpg" alt="Borde inferior">
+    </div>
+</div>
+
+<button class="btn-descargar" onclick="descargar()">Descargar Imagen</button>
+
+<script>
+    function cargarImagen(e) {
+        if (e.target.files[0]) {
+            document.getElementById('logoImg').src = URL.createObjectURL(e.target.files[0]);
+        }
+    }
+
+    function descargar() {
+        const el = document.querySelector("#comprobante");
+        html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'comprobante_final.png';
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+</script>
+</body>
+</html>
